@@ -1,10 +1,11 @@
+import { onAuthStateChanged, User, Auth } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { firebaseAuth } from '@/plugins/firebase';
 import firestore from '@/plugins/firestore';
-import { User } from '@firebase/auth-types';
 
-export default async function({ redirect, route }) {
+export default async function ({ redirect, route }) {
   try {
-    const user: User = (await getCurrentUser(firebaseAuth)) as User;
+    const user: User | null = await getCurrentUser(firebaseAuth);
     if (user == null && isAuthenticatedRoute(route)) redirect('/login');
     if (user != null && route.name === 'login') redirect('/overview');
 
@@ -22,7 +23,7 @@ function isAuthenticatedRoute(route) {
 }
 
 function isAdminRoute(route) {
-  if (route.matched.some(record => record.path === '/admin')) {
+  if (route.matched.some((record) => record.path === '/admin')) {
     return true;
   }
 }
@@ -31,22 +32,24 @@ function isUserRoute(route) {
   return ['profile', 'overview'].includes(route.name);
 }
 
-async function hasAdminRole(user) {
+async function hasAdminRole(user: User) {
   if (!user.uid) return false;
 
-  const role = await firestore
-    .collection('roles')
-    .doc(user.uid)
-    .get();
+  const roleRef = doc(firestore, 'roles', user.uid);
+  const role = await getDoc(roleRef);
 
-  return role.exists && role.data().role === 'admin';
+  return role.exists() && role.data()?.role === 'admin';
 }
 
-function getCurrentUser(firebaseAuth) {
+function getCurrentUser(auth: Auth): Promise<User | null> {
   return new Promise((resolve, reject) => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged(user => {
-      unsubscribe();
-      resolve(user);
-    }, reject);
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject,
+    );
   });
 }

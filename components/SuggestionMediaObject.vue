@@ -33,6 +33,27 @@
   </article>
 </template>
 
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
+
+@Component
+export default class SuggestionMediaObject extends Vue {
+  @Prop() suggestion;
+
+  userVoted() {
+    return this.suggestion.votes.findIndex((vote) => vote.userId === this.user.uid) > -1;
+  }
+
+  isUserSuggestion() {
+    return this.suggestion.user.id === this.user.uid;
+  }
+
+  get user() {
+    return this.$store.state.auth.user;
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 .votes__container {
   display: inline-block;
@@ -46,24 +67,3 @@
   cursor: pointer;
 }
 </style>
-
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-
-@Component
-export default class SuggestionMediaObject extends Vue {
-  @Prop() suggestion;
-
-  userVoted() {
-    return this.suggestion.votes.findIndex(vote => vote.userId === this.user.uid) > -1;
-  }
-
-  isUserSuggestion() {
-    return this.suggestion.user.id === this.user.uid;
-  }
-
-  get user() {
-    return this.$store.state.auth.user;
-  }
-}
-</script>

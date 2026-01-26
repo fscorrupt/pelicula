@@ -87,3 +87,5 @@ sw.*
 # Firebase
 .firebaserc
 .firebase/
+
+.claude/settings.local.json

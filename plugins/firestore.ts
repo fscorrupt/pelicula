@@ -1,6 +1,6 @@
-import firebase from './firebase';
-import '@firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
+import app from './firebase';
 
-const firestore = firebase.firestore();
+const firestore = getFirestore(app);
 
 export default firestore;

@@ -21,15 +21,11 @@
 
     <div class="columns is-mobile">
       <div class="column">
-        <b-button type="is-danger" icon-left="delete" @click="openDeleteAccountDialog()">
-          Delete account
-        </b-button>
+        <b-button type="is-danger" icon-left="delete" @click="openDeleteAccountDialog()"> Delete account </b-button>
       </div>
     </div>
   </section>
 </template>
-
-<style lang="scss"></style>
 
 <script>
 import { Component, Vue } from 'vue-property-decorator';
@@ -37,8 +33,8 @@ import Card from '@/components/Card';
 
 @Component({
   components: {
-    Card
-  }
+    Card,
+  },
 })
 export default class Overview extends Vue {
   get user() {
@@ -52,7 +48,7 @@ export default class Overview extends Vue {
       confirmText: 'Delete Account',
       type: 'is-danger',
       hasIcon: true,
-      onConfirm: () => this.deleteAccount()
+      onConfirm: () => this.deleteAccount(),
     });
   }
 
@@ -63,7 +59,7 @@ export default class Overview extends Vue {
       duration: 5000,
       message: `Account deleted! Signing out...`,
       position: 'is-bottom',
-      type: 'is-danger'
+      type: 'is-danger',
     });
 
     await this.$store.dispatch('auth/signOut');
@@ -71,3 +67,5 @@ export default class Overview extends Vue {
   }
 }
 </script>
+
+<style lang="scss"></style>

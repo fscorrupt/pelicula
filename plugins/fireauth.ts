@@ -1,10 +1,13 @@
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { firebaseAuth } from '@/plugins/firebase';
-import { User } from '@firebase/auth-types';
 
 export default async ({ store }) => {
-  await firebaseAuth.onAuthStateChanged(async (user: User) => {
-    if (user) {
-      await store.dispatch('auth/authStateChange', user);
-    }
+  await new Promise<void>((resolve) => {
+    onAuthStateChanged(firebaseAuth, async (user: User | null) => {
+      if (user) {
+        await store.dispatch('auth/authStateChange', user);
+      }
+      resolve();
+    });
   });
 };

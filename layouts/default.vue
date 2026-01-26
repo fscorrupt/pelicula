@@ -60,28 +60,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-.navbar-menu {
-  .navbar-link__text {
-    color: white;
-
-    &.nuxt-link-active {
-      font-weight: bold;
-    }
-  }
-
-  &.is-active {
-    .navbar-link__text {
-      color: blueviolet;
-
-      &.nuxt-link-active {
-        font-weight: bold;
-      }
-    }
-  }
-}
-</style>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -107,3 +85,25 @@ export default class extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.navbar-menu {
+  .navbar-link__text {
+    color: white;
+
+    &.nuxt-link-active {
+      font-weight: bold;
+    }
+  }
+
+  &.is-active {
+    .navbar-link__text {
+      color: blueviolet;
+
+      &.nuxt-link-active {
+        font-weight: bold;
+      }
+    }
+  }
+}
+</style>

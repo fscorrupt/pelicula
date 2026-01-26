@@ -7,7 +7,7 @@
         field="title"
         :loading="isFetching"
         @typing="getAsyncData"
-        @select="option => select(option)"
+        @select="(option) => select(option)"
       >
         <template slot-scope="props">
           <div class="media">
@@ -47,9 +47,9 @@ export default class SearchBar extends Vue {
       .get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&query=${name}`)
       .then(({ data }) => {
         this.data = [];
-        data.results.forEach(item => this.data.push(item));
+        data.results.forEach((item) => this.data.push(item));
       })
-      .catch(error => {
+      .catch((error) => {
         this.data = [];
         throw error;
       })

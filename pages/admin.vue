@@ -6,9 +6,7 @@
       </div>
 
       <card :title="calendarDate.toLocaleDateString()">
-        <template v-if="!currentDateEvents.length">
-          No events on this date.
-        </template>
+        <template v-if="!currentDateEvents.length"> No events on this date. </template>
         <template v-else>
           <b-collapse v-for="(event, index) in currentDateEvents" :key="event.id" class="card" :open="!index">
             <div slot="trigger" slot-scope="props" class="card-header" role="button">
@@ -39,8 +37,6 @@
   </section>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Card from '@/components/Card.vue';
@@ -53,8 +49,8 @@ import { isSameDay } from '@/helpers/datetime';
   components: {
     Card,
     Calendar,
-    AddEventModal
-  }
+    AddEventModal,
+  },
 })
 export default class Admin extends Vue {
   calendarDate: Date = new Date();
@@ -69,11 +65,11 @@ export default class Admin extends Vue {
   }
 
   get calendarEvents(): Date | Object {
-    return this.events.map(event => event.date);
+    return this.events.map((event) => event.date);
   }
 
   get currentDateEvents(): Event[] {
-    return this.events.filter(event => isSameDay(event.date, this.calendarDate));
+    return this.events.filter((event) => isSameDay(event.date, this.calendarDate));
   }
 
   saveEvent(event) {
@@ -85,11 +81,11 @@ export default class Admin extends Vue {
       await this.$store.dispatch('events/addEvent', { ...event, timestamp: this.calendarDate });
       this.isEventModalActive = false;
       this.$buefy.toast.open({
-        message: 'Event added'
+        message: 'Event added',
       });
     } catch (e) {
       this.$buefy.toast.open({
-        message: 'Error while adding event'
+        message: 'Error while adding event',
       });
     }
   }
@@ -99,11 +95,11 @@ export default class Admin extends Vue {
       await this.$store.dispatch('events/updateEvent', event);
       this.isEventModalActive = false;
       this.$buefy.toast.open({
-        message: 'Event updated'
+        message: 'Event updated',
       });
     } catch (e) {
       this.$buefy.toast.open({
-        message: 'Error while updating event'
+        message: 'Error while updating event',
       });
     }
   }
@@ -113,3 +109,5 @@ export default class Admin extends Vue {
   }
 }
 </script>
+
+<style lang="scss"></style>

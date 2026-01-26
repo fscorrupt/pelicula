@@ -26,7 +26,7 @@ import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
 export default class AddEventModal extends Vue {
   @Prop() isActive: boolean;
   event = {
-    description: ''
+    description: '',
   };
 
   @Emit()

@@ -27,6 +27,12 @@
   </button>
 </template>
 
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component
+export default class CarButtonGoogleSignInd extends Vue {}
+</script>
 <style lang="scss">
 .google-button {
   height: 40px;
@@ -76,9 +82,3 @@
   font-family: 'Roboto', arial, sans-serif;
 }
 </style>
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-
-@Component
-export default class CarButtonGoogleSignInd extends Vue {}
-</script>

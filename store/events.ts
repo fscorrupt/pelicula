@@ -1,7 +1,19 @@
-import { Event } from '@/types/event';
 import { MutationTree, ActionTree } from 'vuex';
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  addDoc,
+  doc,
+  setDoc,
+  deleteDoc,
+  QuerySnapshot,
+  DocumentData,
+  Timestamp,
+} from 'firebase/firestore';
+import { Event } from '@/types/event';
 import firestore from '@/plugins/firestore';
-import { QuerySnapshot, QueryDocumentSnapshot, DocumentData, Timestamp } from '@firebase/firestore-types';
 
 interface State {
   loading: boolean;
@@ -10,7 +22,7 @@ interface State {
 
 export const state = (): State => ({
   loading: false,
-  events: []
+  events: [],
 });
 
 export const mutations: MutationTree<State> = {
@@ -19,25 +31,19 @@ export const mutations: MutationTree<State> = {
   },
   setEvents(state: State, events: Event[]): void {
     state.events = events;
-  }
+  },
 };
 
 export const actions: ActionTree<State, State> = {
-  // https://nuxtjs.org/guide/vuex-store/#the-nuxtserverinit-action
-  // async nuxtServerInit({ commit }, { req }) {
-  // },
-
-  // Fetch events from Firestore once
   async getEvents({ commit }) {
     commit('setLoading', true);
 
-    const eventsSnapshot: QuerySnapshot = await firestore
-      .collection('events')
-      .orderBy('timestamp')
-      .get();
-    const events: Event[] = eventsSnapshot.docs.map((event: QueryDocumentSnapshot) => {
-      const eventData: DocumentData = event.data();
-      const timestamp: Timestamp = eventData.timestamp;
+    const eventsRef = collection(firestore, 'events');
+    const q = query(eventsRef, orderBy('timestamp'));
+    const eventsSnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
+    const events: Event[] = eventsSnapshot.docs.map((event) => {
+      const eventData = event.data();
+      const timestamp = eventData.timestamp as Timestamp;
       const date: Date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds);
       return { id: event.id, timestamp, date, description: eventData.description };
     });
@@ -46,21 +52,18 @@ export const actions: ActionTree<State, State> = {
     commit('setLoading', false);
   },
   async addEvent({ dispatch }, event) {
-    await firestore.collection('events').add(event);
+    const eventsRef = collection(firestore, 'events');
+    await addDoc(eventsRef, event);
     dispatch('getEvents');
   },
   async updateEvent({ dispatch }, event) {
-    await firestore
-      .collection('events')
-      .doc(event.id)
-      .set(event);
+    const eventRef = doc(firestore, 'events', event.id);
+    await setDoc(eventRef, event);
     dispatch('getEvents');
   },
   async deleteEvent({ dispatch }, event) {
-    await firestore
-      .collection('events')
-      .doc(event.id)
-      .delete();
+    const eventRef = doc(firestore, 'events', event.id);
+    await deleteDoc(eventRef);
     dispatch('getEvents');
-  }
+  },
 };

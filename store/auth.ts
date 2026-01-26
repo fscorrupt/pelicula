@@ -1,6 +1,8 @@
-import { User } from '@/types/user';
 import { MutationTree, ActionTree } from 'vuex';
-import { firebaseAuth, GoogleAuthProvider } from '@/plugins/firebase';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { User } from '@/types/user';
+import { firebaseAuth, googleAuthProvider } from '@/plugins/firebase';
 import firestore from '@/plugins/firestore';
 
 interface State {
@@ -10,7 +12,7 @@ interface State {
 
 export const state = (): State => ({
   loading: false,
-  user: null
+  user: null,
 });
 
 export const mutations: MutationTree<State> = {
@@ -19,17 +21,10 @@ export const mutations: MutationTree<State> = {
   },
   setUser(state: State, user: User): void {
     state.user = user;
-  }
+  },
 };
 
 export const actions: ActionTree<State, State> = {
-  // https://nuxtjs.org/guide/vuex-store/#the-nuxtserverinit-action
-  // async nuxtServerInit({ commit }, { req }) {
-  //   const user = await firebaseAuth.currentUser;
-  //   console.log('Server init user', user);
-  //   commit('authStateChange', user)
-  // },
-
   async authStateChange({ commit }, firebaseUser) {
     commit('setLoading', true);
 
@@ -37,22 +32,18 @@ export const actions: ActionTree<State, State> = {
       ...firebaseUser.providerData[0],
       emailVerified: firebaseUser.emailVerified,
       isAnonymous: firebaseUser.isAnonymous,
-      uid: firebaseUser.uid
+      uid: firebaseUser.uid,
     };
 
     if (user && user.uid) {
-      firestore
-        .collection('users')
-        .doc(user.uid)
-        .set(user, { merge: true });
+      const userRef = doc(firestore, 'users', user.uid);
+      await setDoc(userRef, user, { merge: true });
 
-      const role = await firestore
-        .collection('roles')
-        .doc(user.uid)
-        .get();
+      const roleRef = doc(firestore, 'roles', user.uid);
+      const role = await getDoc(roleRef);
 
-      if (role.exists) {
-        user = { ...user, isAdmin: role.data().role === 'admin' };
+      if (role.exists()) {
+        user = { ...user, isAdmin: role.data()?.role === 'admin' };
       }
     }
 
@@ -61,11 +52,11 @@ export const actions: ActionTree<State, State> = {
   },
 
   async signInWithGoogle() {
-    await firebaseAuth.signInWithPopup(GoogleAuthProvider);
+    await signInWithPopup(firebaseAuth, googleAuthProvider);
   },
 
   async signOut({ commit }) {
-    await firebaseAuth.signOut();
+    await signOut(firebaseAuth);
     commit('setUser', null);
-  }
+  },
 };

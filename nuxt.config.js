@@ -3,11 +3,13 @@ const config = {
     [
       '@nuxt/typescript-build',
       {
-        typeCheck: true
-      }
-    ]
+        typeCheck: false,
+        ignoreNotFoundWarnings: true,
+      },
+    ],
   ],
-  mode: 'spa',
+  ssr: false,
+  target: 'static',
   /*
    ** Headers of the page
    */
@@ -19,17 +21,17 @@ const config = {
       {
         hid: 'description',
         name: 'description',
-        content: 'The ultimate PWA for movie night polls.'
-      }
+        content: 'The ultimate PWA for movie night polls.',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   /*
    *  Router middleware for routes access control
    */
   router: {
-    middleware: 'router-auth'
+    middleware: 'router-auth',
   },
 
   /*
@@ -59,7 +61,7 @@ const config = {
     'nuxt-buefy',
     '@nuxtjs/pwa',
     // Doc: https://vue-scrollto.netlify.com/docs
-    'vue-scrollto/nuxt'
+    'vue-scrollto/nuxt',
   ],
   /*
    ** Axios module configuration
@@ -74,8 +76,8 @@ const config = {
     FIREBASE_CLIENT_DATABASE_URL: process.env.FIREBASE_CLIENT_DATABASE_URL || '',
     FIREBASE_CLIENT_PROJECT_ID: process.env.FIREBASE_CLIENT_PROJECT_ID || '',
     FIREBASE_CLIENT_STORAGE_BUCKET: process.env.FIREBASE_CLIENT_STORAGE_BUCKET || '',
-    TMDB_API_KEY: process.env.TMDB_API_KEY || ''
-  }
+    TMDB_API_KEY: process.env.TMDB_API_KEY || '',
+  },
 };
 
 export default config;

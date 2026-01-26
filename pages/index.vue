@@ -72,13 +72,11 @@
                 ><img
                   src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=159266&theme=light"
                   alt="Película - Open source PWA for movie night polls. 🍿 | Product Hunt Embed"
-                  style="width: 250px; height: 54px;"
+                  style="width: 250px; height: 54px"
                   width="250px"
                   height="54px"
               /></a>
-              <b-button size="is-large" icon-right="github-circle" @click="goToRepo()">
-                View on GitHub
-              </b-button>
+              <b-button size="is-large" icon-right="github-circle" @click="goToRepo()"> View on GitHub </b-button>
             </div>
           </div>
           <div class="column is-offset-1 is-6">
@@ -92,12 +90,27 @@
     </section>
 
     <footer class="footer has-background-primary has-text-white">
-      <div class="container has-text-centered">
-        Made with ❤️ in 🇳🇱
-      </div>
+      <div class="container has-text-centered">Made with ❤️ in 🇳🇱</div>
     </footer>
   </main>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+  layout: 'landing',
+})
+export default class extends Vue {
+  goToApp() {
+    this.$router.push('login');
+  }
+
+  goToRepo() {
+    window.open('https://github.com/AlexImb/pelicula', '_blank');
+  }
+}
+</script>
 
 <style lang="scss">
 @import '~/assets/scss/gradients.scss';
@@ -159,20 +172,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-
-@Component({
-  layout: 'landing'
-})
-export default class extends Vue {
-  goToApp() {
-    this.$router.push('login');
-  }
-
-  goToRepo() {
-    window.open('https://github.com/AlexImb/pelicula', '_blank');
-  }
-}
-</script>

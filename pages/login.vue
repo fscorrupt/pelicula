@@ -14,8 +14,6 @@
   </section>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Card from '@/components/Card.vue';
@@ -24,8 +22,8 @@ import ButtonGoogleSignIn from '@/components/ButtonGoogleSignIn.vue';
 @Component({
   components: {
     Card,
-    ButtonGoogleSignIn
-  }
+    ButtonGoogleSignIn,
+  },
 })
 export default class Login extends Vue {
   async signInWithGoogle() {
@@ -38,3 +36,5 @@ export default class Login extends Vue {
   }
 }
 </script>
+
+<style lang="scss"></style>
