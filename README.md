@@ -7,6 +7,8 @@
 
 Película is modern progressive web application aiming to simplify the process of selecting what to watch during the next movie night with your friends.
 
+![Película screenshot](assets/screenshot.png)
+
 ## Self-Hosted
 
 Perfect for tech startups who organize movie nights with the colleagues. The open source version can be hosted on-premises or public cloud/CDN providers like Firebase and Netlify for free.
